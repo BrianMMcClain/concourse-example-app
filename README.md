@@ -1,24 +1,3 @@
-# README
+# Concourse Example App
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+This is a very simple rails app designed to demonstrate the Concourse CI pipeline. The application will read and write articles (but not edit) and contains a small handful of tests to drive the testing pipeline.
