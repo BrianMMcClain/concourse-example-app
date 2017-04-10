@@ -1,0 +1,14 @@
+resources:
+- name: concourse-example-app
+  type: git
+  source:
+    uri: https://github.com/brianmmcclain/concourse-example-app
+    branch: master
+
+jobs:
+- name: test-app
+  plan:
+  - get: concourse-example-app
+    trigger: true
+  - task: tests
+    file: concourse-example-app/build.yml
