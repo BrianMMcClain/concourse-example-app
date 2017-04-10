@@ -4,6 +4,15 @@ resources:
   source:
     uri: https://github.com/brianmmcclain/concourse-example-app
     branch: master
+- name: app-staging
+  type: cf
+  source:
+    api: api.bosh-lite.com
+    username: {{cf-username}}
+    password: {{cf-password}}
+    organization: stage
+    space: stage
+    skip_cert_check: true
 
 jobs:
 - name: test-app
@@ -12,3 +21,6 @@ jobs:
     trigger: true
   - task: tests
     file: concourse-example-app/build.yml
+  - put: app-staging
+    params:
+      manifest: ./concourse-example-app/manifest.yml
