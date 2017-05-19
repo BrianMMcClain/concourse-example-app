@@ -3,7 +3,6 @@
 set -e -x
 
 pushd concourse-example-app
-  echo $SRCCLR_API_TOKEN
-  curl -sSL  https://download.sourceclear.com/ci.sh | bash -s -- scan . --allow-dirty --json
-  ruby -v
+  curl -sSL  https://download.sourceclear.com/ci.sh | bash -s -- scan . --allow-dirty --json > scan.json
+  ruby ci/parse_srcclr_scan.rb
 popd
