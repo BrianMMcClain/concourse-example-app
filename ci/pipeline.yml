@@ -3,11 +3,11 @@ resources:
   type: git
   source:
     uri: https://github.com/brianmmcclain/concourse-example-app
-    branch: master
+    branch: srcclr
 - name: app-staging
   type: cf
   source:
-    api: api.bosh-lite.com
+    api: api.bmcclain.com
     username: {{cf-username}}
     password: {{cf-password}}
     organization: stage
@@ -20,7 +20,23 @@ jobs:
   - get: concourse-example-app
     trigger: true
   - task: tests
-    file: concourse-example-app/build.yml
+    file: concourse-example-app/ci/test.yml
+
+- name: sourceclear-scan
+  plan:
+  - get: concourse-example-app
+    passed: [test-app]
+    trigger: true
+  - task: srcclr-scan
+    file: concourse-example-app/ci/sourceclear.yml
+    params:
+      SRCCLR_API_TOKEN: {{srcclr-api-token}}
+
+- name: deploy-staging
+  plan:
+  - get: concourse-example-app
+    passed: [sourceclear-scan]
+    trigger: true
   - put: app-staging
     params:
       manifest: ./concourse-example-app/manifest.yml
