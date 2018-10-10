@@ -7,11 +7,11 @@ resources:
 - name: app-staging
   type: cf
   source:
-    api: api.bosh-lite.com
+    api: api.v3.pcfdev.io
     username: {{cf-username}}
     password: {{cf-password}}
-    organization: stage
-    space: stage
+    organization: dev
+    space: dev
     skip_cert_check: true
 
 jobs:
@@ -24,3 +24,18 @@ jobs:
   - put: app-staging
     params:
       manifest: ./concourse-example-app/manifest.yml
+
+- name: hello-world
+  plan:
+  - get: concourse-example-app
+    passed: [test-app]
+    trigger: true
+  - task: hello
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: ubuntu}
+      run:
+        path: echo
+        args: ["Hello World!"]
